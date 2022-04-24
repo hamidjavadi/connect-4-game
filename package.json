@@ -4,8 +4,15 @@
   "description": "The connect4 game",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node-dev --respawn ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hamid Javadi",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "ts-node-dev": "^1.1.8"
+  }
 }
