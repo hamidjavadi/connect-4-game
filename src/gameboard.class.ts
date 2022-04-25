@@ -1,10 +1,12 @@
 import { Node } from "./node.class";
+import { NodeStatus } from "./types/node";
 
 export class GameBoard {
 
   boardTable: Node[][] = [];
   boardColumns: number = 0
-  boardRows: number = 0
+  boardRows: number = 0;
+  latestAddedNode!: Node;
 
   constructor(boardColumns: number, boardRows: number) {
     this.boardColumns = boardColumns;
@@ -13,7 +15,11 @@ export class GameBoard {
     this.initTable();
   }
 
-  initTable() {
+  /**
+   * Initiates the table nodes
+   * 
+   */
+  private initTable() {
     try {
 
       let columns: Node[] = [];
@@ -26,6 +32,60 @@ export class GameBoard {
         this.boardTable.push(columns);
         columns = [];
       }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Checks if a column has empty nodes
+   * 
+   * @param ColumnNumber number
+   * @returns boolean
+   */
+  hasEmptyNodeInColumn(columnNumber: number) {
+    try {
+      let hasEmptyNode: boolean = false;
+
+      hasEmptyNode = this.boardTable.some((row: Node[]) => {
+        if (row[columnNumber].status === NodeStatus.Empty) {
+          return true;
+        }
+      });
+
+      return hasEmptyNode;
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Puts a new node to the given column
+   * 
+   * @param columnNumber number
+   * @param newNode Node
+   */
+  putNewNodeInColumn(columnNumber: number, newNode: Node) {
+    try {
+
+      let latestEmtpyNode: Node = newNode;
+
+      if (this.hasEmptyNodeInColumn(columnNumber)) {
+        this.boardTable.forEach((row: Node[]) => {
+          if (row[columnNumber].status === NodeStatus.Empty) {
+            latestEmtpyNode = row[columnNumber];
+          }
+        })
+      }
+
+      latestEmtpyNode.backgroundColor = newNode.backgroundColor;
+      latestEmtpyNode.column = columnNumber;
+      latestEmtpyNode.status = NodeStatus.Filled;
+      latestEmtpyNode.textColor = newNode.textColor;
+
+      this.latestAddedNode = latestEmtpyNode;
 
     } catch (error) {
       console.log(error);
@@ -47,7 +107,12 @@ export class GameBoard {
       // Begin render header numbers
       let headers: string = '';
       for (let col = 0; col < this.boardColumns; col++) {
-        headers = headers.concat(` ${col + 1}  `);
+        if (col > 10) {
+          headers = headers.concat(` ${col + 1} `);
+        } else {
+          headers = headers.concat(` ${col + 1}  `);
+        }
+
       }
 
       console.log(headers);
