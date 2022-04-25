@@ -3,6 +3,8 @@ import inquirer from "inquirer";
 import { Player } from "./types/player";
 import { gameDimension, gameStatus } from "./types/game";
 import { GameBoard } from "./gameboard.class";
+import { Node } from "./node.class";
+import { NodeStatus } from "./types/node";
 
 export class Game {
 
@@ -15,32 +17,32 @@ export class Game {
   };
   gameStatus: gameStatus = gameStatus.Setup;
   player1: Player = {
-    backgroundColor: BackgroundColor.Green,
-    beadBackgroundColor: BackgroundColor.Green,
-    beadTextColor: TextColor.Green,
-    textColor: TextColor.White,
+    backgroundColor: BackgroundColor.Black,
+    beadBackgroundColor: BackgroundColor.Magenta,
+    beadTextColor: TextColor.Magenta,
+    textColor: TextColor.Magenta,
   };
   player2: Player = {
-    backgroundColor: BackgroundColor.Cyan,
+    backgroundColor: BackgroundColor.Black,
     beadBackgroundColor: BackgroundColor.Cyan,
     beadTextColor: TextColor.Cyan,
-    textColor: TextColor.White,
+    textColor: TextColor.Cyan,
   };
   prompt = inquirer.createPromptModule();
   winnerPlayer!: Player | undefined;
 
   constructor() {
 
-    /**** test data ***/
-    this.connectionCount = 4;
-    this.gameDimension = {
-      columns: 10,
-      rows: 10
-    };
-    this.gameStatus = gameStatus.MakeGameReady;
-    this.player1.name = 'Hamid';
-    this.player2.name = 'Marzieh';
-    /**** /test data ***/
+    // /**** test data ***/
+    // this.connectionCount = 4;
+    // this.gameDimension = {
+    //   columns: 10,
+    //   rows: 10
+    // };
+    // this.gameStatus = gameStatus.MakeGameReady;
+    // this.player1.name = 'Hamid';
+    // this.player2.name = 'Marzieh';
+    // /**** /test data ***/
 
     this.startGame();
   }
@@ -87,10 +89,10 @@ export class Game {
           this.runGame();
           break;
         case gameStatus.Running:
-          this.getPlayerInput();
 
-          console.log();
-          this.renderGame();
+          this.renderPlayer();
+          this.renderGameBoard();
+          this.getPlayerInput();
 
           // this.gameStatus = gameStatus.Finishing;
           break;
@@ -249,24 +251,34 @@ export class Game {
     }
   }
 
-
   /**
    * Gets player input to choose a column and put a bead in it
    *  
    */
   getPlayerInput() {
     try {
+
+      // Add a gap from the top
+      console.log();
+
       this.prompt([
         {
           name: 'Choose a column',
           validate: (column) => {
 
+            // Check if it is a number
             if (isNaN(column)) {
               return 'Please enter a number'
             }
 
+            // Check if it is in the impossible range
             if (column < 1 || column > this.gameDimension.columns) {
               return `Please enter a number between 1 and ${this.gameDimension.columns}`;
+            }
+
+            // Check if it is possible to choose from board
+            if (this.gameBoard.hasEmptyNodeInColumn(column - 1) === false) {
+              return `Column number ${column} is full, please choose another column`;
             }
 
             return true;
@@ -275,14 +287,26 @@ export class Game {
         }
       ])
         .then(answers => {
-          console.log(answers);
+          const columnNumber = answers['Choose a column'] - 1;
+          const newNode: Node = {
+            backgroundColor: this.currentPlayer.beadBackgroundColor,
+            column: columnNumber,
+            row: -1,
+            status: NodeStatus.Filled,
+            text: '',
+            textColor: this.currentPlayer.beadTextColor
+          };
+
+          this.gameBoard.putNewNodeInColumn(columnNumber, newNode);
+          this.turnPlayers();
+
+          this.runGame();
         })
     } catch (error) {
       console.log(error);
 
     }
   }
-
 
   /**
    * Makes the game ready by generating game board
@@ -301,13 +325,30 @@ export class Game {
   }
 
   /**
-   * Renders the latest state of the game
+   * Renders the latest state of the game board
    * 
    */
-  renderGame() {
+  renderGameBoard() {
     try {
 
       this.gameBoard.render();
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Renders the current player
+   * 
+   */
+  renderPlayer() {
+    try {
+
+      // Add a gap to the top
+      console.log();
+
+      console.log(` ${this.currentPlayer.backgroundColor}${this.currentPlayer.textColor}${this.currentPlayer.name}!\x1b[0m it's your turn`)
 
     } catch (error) {
       console.log(error);
@@ -319,5 +360,21 @@ export class Game {
    */
   startGame() {
     this.runGame();
+  }
+
+
+  turnPlayers() {
+    try {
+
+      if (this.currentPlayer === this.player1) {
+        this.currentPlayer = this.player2;
+      } else {
+        this.currentPlayer = this.player1
+      }
+
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 }
