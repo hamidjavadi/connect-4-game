@@ -1,10 +1,15 @@
-export type Node = {
-  col: number,
+import { BackgroundColor, TextColor } from "./colors";
+
+export interface INode {
+  column: number,
+  backgroundColor: BackgroundColor,
   row: number,
-  status: NodeStatus
+  status: NodeStatus,
+  text: string,
+  textColor: TextColor
 }
 
 export enum NodeStatus {
-  Empty = 0,
-  Filled = 1
+  Empty = 'Empty',
+  Filled = 'Filled'
 }
