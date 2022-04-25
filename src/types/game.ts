@@ -12,7 +12,6 @@ export enum gameStatus {
   GetGameDimensions = 'GetGameDimensions',
   GetConnectionsCount = 'GetConnectionsCount',
   GetPlayersName = 'GetPlayersName',
-  GetSecondPlayerName = 'GetSecondPlayerName',
   Running = 'Running',
   Finishing = 'Finishing',
   Finished = 'Finished',
