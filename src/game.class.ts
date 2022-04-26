@@ -33,16 +33,16 @@ export class Game {
 
   constructor() {
 
-    // /**** test data ***/
-    // this.connectionCount = 4;
-    // this.gameDimension = {
-    //   columns: 10,
-    //   rows: 10
-    // };
-    // this.gameStatus = gameStatus.MakeGameReady;
-    // this.player1.name = 'Hamid';
-    // this.player2.name = 'Marzieh';
-    // /**** /test data ***/
+    /**** test data ***/
+    this.connectionCount = 3;
+    this.gameDimension = {
+      columns: 5,
+      rows: 5
+    };
+    this.gameStatus = gameStatus.MakeGameReady;
+    this.player1.name = 'Hamid';
+    this.player2.name = 'Marzieh';
+    /**** /test data ***/
 
     this.startGame();
   }
@@ -94,10 +94,22 @@ export class Game {
           this.renderGameBoard();
           this.getPlayerInput();
 
+<<<<<<< HEAD
           // this.gameStatus = gameStatus.Finishing;
           break;
         case gameStatus.Finishing:
           this.gameStatus = gameStatus.ShowResult;
+=======
+          this.gameStatus = gameStatus.CheckStatus;
+          break;
+        case gameStatus.CheckStatus:
+          this.checkGameStatus();
+          break;
+        case gameStatus.Finishing:
+          console.log('Finishing');
+
+          // this.gameStatus = gameStatus.ShowResult;
+>>>>>>> stages/checkgamestatus
           break;
         case gameStatus.ShowResult:
           console.log(
@@ -117,7 +129,29 @@ export class Game {
   }
 
   /**
+<<<<<<< HEAD
    * Get the beads connections to win
+=======
+   * Checks the latest game status and set it to the next status
+   * 
+   */
+  checkGameStatus() {
+    try {
+      if (this.gameBoard.hasConnection(this.connectionCount) === false) {
+        this.gameStatus = gameStatus.Running;
+      } else {
+        this.gameStatus = gameStatus.Finishing;
+      }
+
+      this.runGame();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Receives the beads connections to win
+>>>>>>> stages/checkgamestatus
    * @param connections number
    * @returns void
    */
@@ -153,7 +187,11 @@ export class Game {
   }
 
   /**
+<<<<<<< HEAD
    * Get game board dimension form user
+=======
+   * Receives game board dimension form user
+>>>>>>> stages/checkgamestatus
    * 
    * @param Column number
    * @param Rows number
@@ -207,7 +245,11 @@ export class Game {
   }
 
   /**
+<<<<<<< HEAD
    * Get players name
+=======
+   * Receives players name
+>>>>>>> stages/checkgamestatus
    * 
    * @param playerOne string
    * @param playerTwo string
@@ -356,13 +398,24 @@ export class Game {
   }
 
   /**
+<<<<<<< HEAD
    * Start the game
+=======
+   * Starts the game
+>>>>>>> stages/checkgamestatus
    */
   startGame() {
     this.runGame();
   }
 
+<<<<<<< HEAD
 
+=======
+  /**
+   * Changes the players turn
+   *
+   */
+>>>>>>> stages/checkgamestatus
   turnPlayers() {
     try {
 
