@@ -34,10 +34,10 @@ export class Game {
   constructor() {
 
     /**** test data ***/
-    this.connectionCount = 4;
+    this.connectionCount = 3;
     this.gameDimension = {
-      columns: 10,
-      rows: 10
+      columns: 5,
+      rows: 5
     };
     this.gameStatus = gameStatus.MakeGameReady;
     this.player1.name = 'Hamid';

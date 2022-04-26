@@ -33,60 +33,10 @@ export class GameBoard {
         columns = [];
       }
 
-      /********************************************************************* test /
-      this.TestAddNode();
-      /********************************************************************* end test */
-
-
     } catch (error) {
       console.log(error);
     }
   }
-
-  /********************************************************************* test /
-  beadBackgroundColor = BackgroundColor.White;
-  beadTextColor = TextColor.White;
-  currentTestNodeNumber = 0;
-
-  TestAddNode() {
-    let col = Math.floor(Math.random() * 10);
-    let newNode = new Node(0, 0);
-    let totalNodes = (this.boardColumns * this.boardRows) / 3;
-
-    if (this.beadBackgroundColor !== BackgroundColor.Green) {
-      this.beadBackgroundColor = BackgroundColor.Green;
-      this.beadTextColor = TextColor.Green;
-    } else {
-      this.beadBackgroundColor = BackgroundColor.Magenta;
-      this.beadTextColor = TextColor.Magenta;
-    }
-
-    newNode.backgroundColor = this.beadBackgroundColor;
-    newNode.textColor = this.beadTextColor;
-    newNode.text = 'XX';
-
-    this.putNewNodeInColumn(col, newNode);
-
-    if (this.hasConnection(4) === false) {
-
-      const prompt = inquirer.createPromptModule();
-
-      prompt([{
-        name: 'continue 2',
-      }]).then(answers => {
-        this.currentTestNodeNumber++;
-
-        if (totalNodes > this.currentTestNodeNumber) {
-          this.TestAddNode();
-        }
-      }).finally(() => {
-        this.render();
-      });
-    }
-  }
-  /********************************************************************* end test */
-
-
 
   /**
    * Checks if a column has empty nodes
@@ -114,18 +64,39 @@ export class GameBoard {
   /**
    * Looks for a connection with a specified length based on the latest added Node
    * 
-   * @param length number
+   * @param targetConnectionLength number
    * @returns boolean
    */
-  hasConnection(length: number = 2) {
+  hasConnection(targetConnectionLength: number = 2) {
     try {
 
       // Begin check the vertical connections
       const verticalConnections: Node[] = this.getLatestAddedNodeVerticalConnections();
-      if (verticalConnections.length + 1 === length) {
+      if (verticalConnections.length + 1 === targetConnectionLength) {
         return true;
       }
       // End check the vertical connections
+
+      // Begin check the horizontal connections
+      const horizontalConnections: Node[] = this.getLatestAddedNodeHorizontalConnections();
+      if (horizontalConnections.length + 1 === targetConnectionLength) {
+        return true;
+      }
+      // End check the horizontal connections
+
+      // Begin check the diagonal connections (135 and 315 degrees)
+      const diagonalConnections135_315: Node[] = this.getLatestAddedNodeDiagonalConnections135_315();
+      if (diagonalConnections135_315.length + 1 === targetConnectionLength) {
+        return true;
+      }
+      // End check the diagonal connections (135 and 315 degrees)
+
+      // Begin check the diagonal connections (45 and 225 degrees)
+      const diagonalConnections45_225: Node[] = this.getLatestAddedNodeDiagonalConnections45_225();
+      if (diagonalConnections45_225.length + 1 === targetConnectionLength) {
+        return true;
+      }
+      // End check the diagonal connections (45 and 225 degrees)
 
     } catch (error) {
       console.log(error);
@@ -135,12 +106,225 @@ export class GameBoard {
   }
 
   /**
+   * Gets the digonal connections of the latest added Node (135 and 315 degrees)
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeDiagonalConnections135_315() {
+    try {
+
+      let diagonalConnections135: Node[] = this.getLatestAddedNodeDiagonalConnections135();
+      let diagonalConnections315: Node[] = this.getLatestAddedNodeDiagonalConnections315();
+
+      const diagonalConnections = [...diagonalConnections135, ...diagonalConnections315];
+
+      return diagonalConnections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the digonal connections of the latest added Node (315 degree)
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeDiagonalConnections315(): Node[] {
+    try {
+
+      let connections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column - 1;
+      let nextNodeRow: number = this.latestAddedNode.row + 1;
+
+      while (continueCounting) {
+
+        if (nextNodeRow < this.boardRows && nextNodeColumn >= 0) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeRow++;
+            nextNodeColumn--;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+
+      return connections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the digonal connections of the latest added Node (135 degree)
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeDiagonalConnections135(): Node[] {
+    try {
+
+      let connections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column + 1;
+      let nextNodeRow: number = this.latestAddedNode.row - 1;
+
+      while (continueCounting) {
+
+        if (nextNodeRow >= 0 && nextNodeColumn < this.boardColumns) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeRow--;
+            nextNodeColumn++;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+
+      return connections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the digonal connections of the latest added Node (225 degree)
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeDiagonalConnections225(): Node[] {
+    try {
+
+      let connections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column + 1;
+      let nextNodeRow: number = this.latestAddedNode.row + 1;
+
+      while (continueCounting) {
+
+        if (nextNodeRow < this.boardRows && nextNodeColumn < this.boardColumns) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeRow++;
+            nextNodeColumn++;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+
+      return connections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the digonal connections of the latest added Node (45 degree)
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeDiagonalConnections45(): Node[] {
+    try {
+
+      let connections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column - 1;
+      let nextNodeRow: number = this.latestAddedNode.row - 1;
+
+      while (continueCounting) {
+
+        if (nextNodeRow >= 0 && nextNodeColumn >= 0) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeRow--;
+            nextNodeColumn--;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+
+      return connections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the digonal connections of the latest added Node (45 and 225 degrees)
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeDiagonalConnections45_225() {
+    try {
+
+      let diagonalConnections45: Node[] = this.getLatestAddedNodeDiagonalConnections45();
+      let diagonalConnections225: Node[] = this.getLatestAddedNodeDiagonalConnections225();
+
+      const diagonalConnections = [...diagonalConnections45, ...diagonalConnections225];
+
+      return diagonalConnections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the right and left connections of the latest added Node
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeHorizontalConnections() {
+    try {
+
+      let rightConnections: Node[] = this.getLatestAddedNodeRightConnections();
+      let leftConnections: Node[] = this.getLatestAddedNodeLeftConnections();
+
+      const horizontalConnections = [...leftConnections, ...rightConnections];
+
+      return horizontalConnections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
    * Gets the top and bottom connections of the latest added Node
    * 
    * @returns Node[]
    */
   getLatestAddedNodeVerticalConnections() {
     try {
+
+      // There is no top connections for the latest added Node
 
       let bottomConnections: Node[] = this.getLatestAddedNodeBottomConnections();
       return bottomConnections;
@@ -159,19 +343,16 @@ export class GameBoard {
   getLatestAddedNodeBottomConnections(): Node[] {
     try {
 
-      let bottomConnections: Node[] = [];
+      let connections: Node[] = [];
       let continueCounting: boolean = true;
       let nextNodeColumn: number = this.latestAddedNode.column;
       let nextNodeRow: number = this.latestAddedNode.row + 1;
 
-      /* Begin count the bottom connections */
       while (continueCounting) {
 
         if (nextNodeRow < this.boardRows) {
           if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
-            console.log('Bottom Connection Found');
-
-            bottomConnections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
             nextNodeRow++;
           } else {
             continueCounting = false;
@@ -181,9 +362,80 @@ export class GameBoard {
         }
 
       }
-      /* End count the bottom connections */
 
-      return bottomConnections;
+      return connections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the right connections of the latest added Node
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeRightConnections(): Node[] {
+    try {
+
+      let connections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column + 1;
+      let nextNodeRow: number = this.latestAddedNode.row;
+
+      while (continueCounting) {
+
+        if (nextNodeColumn < this.boardColumns) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeColumn++;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+
+      return connections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the left connections of the latest added Node
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeLeftConnections(): Node[] {
+    try {
+
+      let connections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column - 1;
+      let nextNodeRow: number = this.latestAddedNode.row;
+
+      while (continueCounting) {
+
+        if (nextNodeColumn >= 0) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            connections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeColumn--;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+
+      return connections;
 
     } catch (error) {
       console.log(error);
