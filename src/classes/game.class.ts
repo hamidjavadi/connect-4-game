@@ -1,12 +1,12 @@
 import { BackgroundColor, TextColor } from "../types/colors";
 import inquirer from "inquirer";
 import { Player } from "../types/player";
-import { gameDimension, gameStatus } from "../types/game";
+import { gameDimension, gameStatus, IGame } from "../types/game";
 import { GameBoard } from "./gameboard.class";
 import { Node } from "./node.class";
 import { NodeStatus } from "../types/node";
 
-export class Game {
+export class Game implements IGame {
 
   connectionCount: number = 2;
   currentPlayer!: Player;
