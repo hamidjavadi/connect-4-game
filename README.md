@@ -17,3 +17,5 @@ Just download and follow these steps:
 If you need to know how to play it, [watch this video](https://www.youtube.com/watch?v=ylZBRUJi3UQ)
 
 
+### Winner checker function runtime (Big O)
+O(6(n-1) + (n-1))
