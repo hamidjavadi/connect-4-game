@@ -7,6 +7,7 @@ export class GameBoard {
   boardColumns: number = 0
   boardRows: number = 0;
   latestAddedNode!: Node;
+  connectedNodes: Node[] = [];
 
   constructor(boardColumns: number, boardRows: number) {
     this.boardColumns = boardColumns;
@@ -73,6 +74,7 @@ export class GameBoard {
       // Begin check the vertical connections
       const verticalConnections: Node[] = this.getLatestAddedNodeVerticalConnections();
       if (verticalConnections.length + 1 === targetConnectionLength) {
+        this.connectedNodes = [this.latestAddedNode, ...verticalConnections];
         return true;
       }
       // End check the vertical connections
@@ -80,6 +82,7 @@ export class GameBoard {
       // Begin check the horizontal connections
       const horizontalConnections: Node[] = this.getLatestAddedNodeHorizontalConnections();
       if (horizontalConnections.length + 1 === targetConnectionLength) {
+        this.connectedNodes = [this.latestAddedNode, ...horizontalConnections];
         return true;
       }
       // End check the horizontal connections
@@ -87,6 +90,7 @@ export class GameBoard {
       // Begin check the diagonal connections (135 and 315 degrees)
       const diagonalConnections135_315: Node[] = this.getLatestAddedNodeDiagonalConnections135_315();
       if (diagonalConnections135_315.length + 1 === targetConnectionLength) {
+        this.connectedNodes = [this.latestAddedNode, ...diagonalConnections135_315];
         return true;
       }
       // End check the diagonal connections (135 and 315 degrees)
@@ -94,6 +98,7 @@ export class GameBoard {
       // Begin check the diagonal connections (45 and 225 degrees)
       const diagonalConnections45_225: Node[] = this.getLatestAddedNodeDiagonalConnections45_225();
       if (diagonalConnections45_225.length + 1 === targetConnectionLength) {
+        this.connectedNodes = [this.latestAddedNode, ...diagonalConnections45_225];
         return true;
       }
       // End check the diagonal connections (45 and 225 degrees)
