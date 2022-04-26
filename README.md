@@ -19,4 +19,5 @@ If you need to know how to play it, [watch this video](https://www.youtube.com/w
 
 ## Winner checker function runtime (Big O)
 `O(6(n-1) + (n-1))`
+
 `n = number of connected beads to win`
