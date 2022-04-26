@@ -32,18 +32,6 @@ export class Game {
   winnerPlayer!: Player | undefined;
 
   constructor() {
-
-    /**** test data ***/
-    this.connectionCount = 3;
-    this.gameDimension = {
-      columns: 5,
-      rows: 5
-    };
-    this.gameStatus = gameStatus.MakeGameReady;
-    this.player1.name = 'Hamid';
-    this.player2.name = 'Marzieh';
-    /**** /test data ***/
-
     this.startGame();
   }
 
@@ -109,8 +97,12 @@ export class Game {
 
           this.renderGameBoard();
           this.showWinner();
-          // this.gameStatus = gameStatus.Finished;
+          this.menuExitResetGame();
+
           break;
+        case gameStatus.Finished:
+          process.exit();
+
         default:
           break;
       }
@@ -165,7 +157,7 @@ export class Game {
           }
         }
       ]).then((answers) => {
-        this.connectionCount = answers['Enter number of connections to win'];
+        this.connectionCount = Number(answers['Enter number of connections to win']);
       }).finally(() => {
         this.runGame();
       });
@@ -340,6 +332,42 @@ export class Game {
       this.currentPlayer = this.player1;
       this.winnerPlayer = undefined;
 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Shows a menu to the players to choose restart game or exit from the game
+   * 
+   */
+  menuExitResetGame() {
+    try {
+
+      // Add a gap to the top
+      console.log();
+
+      const prompt = inquirer.createPromptModule();
+      prompt([
+        {
+          name: "What do you want to do?",
+          type: 'list',
+          choices: [
+            'Quite',
+            'Restart'
+          ]
+        }
+      ]).then(answers => {
+        if (answers["What do you want to do?"] === 'Quite') {
+          this.gameStatus = gameStatus.Finished;
+        }
+
+        if (answers["What do you want to do?"] === 'Restart') {
+          this.gameStatus = gameStatus.Setup;
+        }
+
+        this.runGame();
+      });
     } catch (error) {
       console.log(error);
     }
