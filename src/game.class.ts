@@ -78,8 +78,8 @@ export class Game {
           break;
         case gameStatus.Running:
 
-          this.renderPlayer();
           this.renderGameBoard();
+          this.renderPlayer();
           this.getPlayerInput();
 
           this.gameStatus = gameStatus.CheckStatus;
