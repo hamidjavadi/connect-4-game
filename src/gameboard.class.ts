@@ -1,4 +1,5 @@
 import { Node } from "./node.class";
+import { BackgroundColor, TextColor } from "./types/colors";
 import { NodeStatus } from "./types/node";
 
 export class GameBoard {
@@ -522,6 +523,19 @@ export class GameBoard {
 
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  /**
+   * Set the connected nodes to blinking
+   */
+  showConnectedNodes() {
+    try {
+      this.connectedNodes.forEach((node: Node) => {
+        node.textColor = TextColor.White;
+      })
+    } catch (error) {
+      console.log(error)
     }
   }
 

@@ -100,18 +100,16 @@ export class Game {
           this.checkGameStatus();
           break;
         case gameStatus.Finishing:
-          console.log('Finishing');
+          this.gameBoard.showConnectedNodes();
+          this.gameStatus = gameStatus.ShowResult;
 
-          // this.gameStatus = gameStatus.ShowResult;
+          this.runGame();
           break;
         case gameStatus.ShowResult:
-          console.log(
-            'columns:', this.gameDimension.columns,
-            'rows', this.gameDimension.rows,
-            'player1', this.player1,
-            'player2', this.player2
-          );
-          this.gameStatus = gameStatus.Finished;
+
+          this.renderGameBoard();
+          this.showWinner();
+          // this.gameStatus = gameStatus.Finished;
           break;
         default:
           break;
@@ -129,6 +127,7 @@ export class Game {
     try {
       if (this.gameBoard.hasConnection(this.connectionCount) === false) {
         this.gameStatus = gameStatus.Running;
+        this.turnPlayers();
       } else {
         this.gameStatus = gameStatus.Finishing;
       }
@@ -321,7 +320,6 @@ export class Game {
           };
 
           this.gameBoard.putNewNodeInColumn(columnNumber, newNode);
-          this.turnPlayers();
 
           this.runGame();
         })
@@ -372,6 +370,23 @@ export class Game {
       console.log();
 
       console.log(` ${this.currentPlayer.backgroundColor}${this.currentPlayer.textColor}${this.currentPlayer.name}!\x1b[0m it's your turn`)
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Shows the winner player
+   * 
+   */
+  showWinner() {
+    try {
+      // Add a gap to the top
+      console.log();
+
+      console.log(`Congratulations! ${this.currentPlayer.textColor}${this.currentPlayer.name} \x1b[0m`);
+      console.log(`You won !!!`);
 
     } catch (error) {
       console.log(error);
