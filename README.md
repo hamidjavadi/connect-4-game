@@ -2,7 +2,7 @@
 
 A Nodejs version of Connect-4 game, but with the following options:
 
-1. You can set the number of connected beans to determine the winner.
+1. You can set the number of connected beads to win.
 2. You can change the number of columns and rows
 
  ## How to run it
@@ -18,4 +18,5 @@ If you need to know how to play it, [watch this video](https://www.youtube.com/w
 
 
 ## Winner checker function runtime (Big O)
-O(6(n-1) + (n-1))
+`O(6(n-1) + (n-1))`
+`n = number of connected beads to win`
