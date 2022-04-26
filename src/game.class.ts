@@ -122,9 +122,6 @@ export class Game {
   }
 
   /**
-<<<<<<< HEAD
-   * Get the beads connections to win
-=======
    * Checks the latest game status and set it to the next status
    * 
    */
@@ -144,7 +141,6 @@ export class Game {
 
   /**
    * Receives the beads connections to win
->>>>>>> stages/checkgamestatus
    * @param connections number
    * @returns void
    */
@@ -180,11 +176,7 @@ export class Game {
   }
 
   /**
-<<<<<<< HEAD
-   * Get game board dimension form user
-=======
    * Receives game board dimension form user
->>>>>>> stages/checkgamestatus
    * 
    * @param Column number
    * @param Rows number
@@ -238,11 +230,7 @@ export class Game {
   }
 
   /**
-<<<<<<< HEAD
-   * Get players name
-=======
    * Receives players name
->>>>>>> stages/checkgamestatus
    * 
    * @param playerOne string
    * @param playerTwo string
