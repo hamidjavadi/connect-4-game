@@ -33,10 +33,60 @@ export class GameBoard {
         columns = [];
       }
 
+      /********************************************************************* test /
+      this.TestAddNode();
+      /********************************************************************* end test */
+
+
     } catch (error) {
       console.log(error);
     }
   }
+
+  /********************************************************************* test /
+  beadBackgroundColor = BackgroundColor.White;
+  beadTextColor = TextColor.White;
+  currentTestNodeNumber = 0;
+
+  TestAddNode() {
+    let col = Math.floor(Math.random() * 10);
+    let newNode = new Node(0, 0);
+    let totalNodes = (this.boardColumns * this.boardRows) / 3;
+
+    if (this.beadBackgroundColor !== BackgroundColor.Green) {
+      this.beadBackgroundColor = BackgroundColor.Green;
+      this.beadTextColor = TextColor.Green;
+    } else {
+      this.beadBackgroundColor = BackgroundColor.Magenta;
+      this.beadTextColor = TextColor.Magenta;
+    }
+
+    newNode.backgroundColor = this.beadBackgroundColor;
+    newNode.textColor = this.beadTextColor;
+    newNode.text = 'XX';
+
+    this.putNewNodeInColumn(col, newNode);
+
+    if (this.hasConnection(4) === false) {
+
+      const prompt = inquirer.createPromptModule();
+
+      prompt([{
+        name: 'continue 2',
+      }]).then(answers => {
+        this.currentTestNodeNumber++;
+
+        if (totalNodes > this.currentTestNodeNumber) {
+          this.TestAddNode();
+        }
+      }).finally(() => {
+        this.render();
+      });
+    }
+  }
+  /********************************************************************* end test */
+
+
 
   /**
    * Checks if a column has empty nodes
@@ -58,6 +108,86 @@ export class GameBoard {
 
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  /**
+   * Looks for a connection with a specified length based on the latest added Node
+   * 
+   * @param length number
+   * @returns boolean
+   */
+  hasConnection(length: number = 2) {
+    try {
+
+      // Begin check the vertical connections
+      const verticalConnections: Node[] = this.getLatestAddedNodeVerticalConnections();
+      if (verticalConnections.length + 1 === length) {
+        return true;
+      }
+      // End check the vertical connections
+
+    } catch (error) {
+      console.log(error);
+    }
+
+    return false;
+  }
+
+  /**
+   * Gets the top and bottom connections of the latest added Node
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeVerticalConnections() {
+    try {
+
+      let bottomConnections: Node[] = this.getLatestAddedNodeBottomConnections();
+      return bottomConnections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  /**
+   * Gets the bottom connections of the latest added Node
+   * 
+   * @returns Node[]
+   */
+  getLatestAddedNodeBottomConnections(): Node[] {
+    try {
+
+      let bottomConnections: Node[] = [];
+      let continueCounting: boolean = true;
+      let nextNodeColumn: number = this.latestAddedNode.column;
+      let nextNodeRow: number = this.latestAddedNode.row + 1;
+
+      /* Begin count the bottom connections */
+      while (continueCounting) {
+
+        if (nextNodeRow < this.boardRows) {
+          if (this.boardTable[nextNodeRow][nextNodeColumn].backgroundColor === this.latestAddedNode.backgroundColor) {
+            console.log('Bottom Connection Found');
+
+            bottomConnections.push(this.boardTable[nextNodeRow][nextNodeColumn]);
+            nextNodeRow++;
+          } else {
+            continueCounting = false;
+          }
+        } else {
+          continueCounting = false;
+        }
+
+      }
+      /* End count the bottom connections */
+
+      return bottomConnections;
+
+    } catch (error) {
+      console.log(error);
+      return [];
     }
   }
 
@@ -100,7 +230,7 @@ export class GameBoard {
     try {
 
       // Add a gap above table
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 3; i++) {
         console.log();
       }
 

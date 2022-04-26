@@ -33,16 +33,16 @@ export class Game {
 
   constructor() {
 
-    // /**** test data ***/
-    // this.connectionCount = 4;
-    // this.gameDimension = {
-    //   columns: 10,
-    //   rows: 10
-    // };
-    // this.gameStatus = gameStatus.MakeGameReady;
-    // this.player1.name = 'Hamid';
-    // this.player2.name = 'Marzieh';
-    // /**** /test data ***/
+    /**** test data ***/
+    this.connectionCount = 4;
+    this.gameDimension = {
+      columns: 10,
+      rows: 10
+    };
+    this.gameStatus = gameStatus.MakeGameReady;
+    this.player1.name = 'Hamid';
+    this.player2.name = 'Marzieh';
+    /**** /test data ***/
 
     this.startGame();
   }
@@ -94,10 +94,15 @@ export class Game {
           this.renderGameBoard();
           this.getPlayerInput();
 
-          // this.gameStatus = gameStatus.Finishing;
+          this.gameStatus = gameStatus.CheckStatus;
+          break;
+        case gameStatus.CheckStatus:
+          this.checkGameStatus();
           break;
         case gameStatus.Finishing:
-          this.gameStatus = gameStatus.ShowResult;
+          console.log('Finishing');
+
+          // this.gameStatus = gameStatus.ShowResult;
           break;
         case gameStatus.ShowResult:
           console.log(
@@ -117,7 +122,25 @@ export class Game {
   }
 
   /**
-   * Get the beads connections to win
+   * Checks the latest game status and set it to the next status
+   * 
+   */
+  checkGameStatus() {
+    try {
+      if (this.gameBoard.hasConnection(this.connectionCount) === false) {
+        this.gameStatus = gameStatus.Running;
+      } else {
+        this.gameStatus = gameStatus.Finishing;
+      }
+
+      this.runGame();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * Receives the beads connections to win
    * @param connections number
    * @returns void
    */
@@ -153,7 +176,7 @@ export class Game {
   }
 
   /**
-   * Get game board dimension form user
+   * Receives game board dimension form user
    * 
    * @param Column number
    * @param Rows number
@@ -207,7 +230,7 @@ export class Game {
   }
 
   /**
-   * Get players name
+   * Receives players name
    * 
    * @param playerOne string
    * @param playerTwo string
@@ -356,13 +379,16 @@ export class Game {
   }
 
   /**
-   * Start the game
+   * Starts the game
    */
   startGame() {
     this.runGame();
   }
 
-
+  /**
+   * Changes the players turn
+   * 
+   */
   turnPlayers() {
     try {
 

@@ -10,6 +10,7 @@ export enum gameStatus {
   GetPlayersName = 'GetPlayersName',
   MakeGameReady = 'MakeGameReady',
   Running = 'Running',
+  CheckStatus = 'CheckStatus',
   Finishing = 'Finishing',
   Finished = 'Finished',
   ShowResult = 'ShowResult'
