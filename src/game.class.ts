@@ -94,12 +94,6 @@ export class Game {
           this.renderGameBoard();
           this.getPlayerInput();
 
-<<<<<<< HEAD
-          // this.gameStatus = gameStatus.Finishing;
-          break;
-        case gameStatus.Finishing:
-          this.gameStatus = gameStatus.ShowResult;
-=======
           this.gameStatus = gameStatus.CheckStatus;
           break;
         case gameStatus.CheckStatus:
@@ -109,7 +103,6 @@ export class Game {
           console.log('Finishing');
 
           // this.gameStatus = gameStatus.ShowResult;
->>>>>>> stages/checkgamestatus
           break;
         case gameStatus.ShowResult:
           console.log(
@@ -398,24 +391,16 @@ export class Game {
   }
 
   /**
-<<<<<<< HEAD
-   * Start the game
-=======
    * Starts the game
->>>>>>> stages/checkgamestatus
    */
   startGame() {
     this.runGame();
   }
 
-<<<<<<< HEAD
-
-=======
   /**
    * Changes the players turn
    *
    */
->>>>>>> stages/checkgamestatus
   turnPlayers() {
     try {
 

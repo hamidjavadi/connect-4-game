@@ -63,8 +63,6 @@ export class GameBoard {
   }
 
   /**
-<<<<<<< HEAD
-=======
    * Looks for a connection with a specified length based on the latest added Node
    * 
    * @param targetConnectionLength number
@@ -451,7 +449,6 @@ export class GameBoard {
   }
 
   /**
->>>>>>> stages/checkgamestatus
    * Puts a new node to the given column
    * 
    * @param columnNumber number
@@ -490,15 +487,6 @@ export class GameBoard {
     try {
 
       // Add a gap above table
-<<<<<<< HEAD
-      for (let i = 0; i < 5; i++) {
-=======
-      for (let i = 0; i < 3; i++) {
->>>>>>> stages/checkgamestatus
-        console.log();
-      }
-
-      // Begin render header numbers
       let headers: string = '';
       for (let col = 0; col < this.boardColumns; col++) {
         if (col > 10) {
