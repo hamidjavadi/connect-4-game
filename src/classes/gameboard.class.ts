@@ -1,6 +1,6 @@
 import { Node } from "./node.class";
-import { BackgroundColor, TextColor } from "./types/colors";
-import { NodeStatus } from "./types/node";
+import { BackgroundColor, TextColor } from "../types/colors";
+import { NodeStatus } from "../types/node";
 
 export class GameBoard {
 

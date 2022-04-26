@@ -1,5 +1,5 @@
-import { BackgroundColor, TextColor } from "./types/colors";
-import { INode, NodeStatus } from "./types/node";
+import { BackgroundColor, TextColor } from "../types/colors";
+import { INode, NodeStatus } from "../types/node";
 
 export class Node implements INode {
 
